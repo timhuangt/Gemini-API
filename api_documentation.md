@@ -39,7 +39,7 @@ sequenceDiagram
 
 * **Default Host**: `http://localhost:8000` (or your server's public IP)
 * **Access Control**: **CORS is fully enabled** (`allow_origins=["*"]`). External browser extensions can safely communicate with this backend across origins.
-* **Cookie Persistence**: Initialized via `/home/tim/Gemini-API/cookies.json` and automatically refreshed in the background during runtime.
+* **Cookie Persistence**: Initialized via `/path/to/your/project/cookies.json` and automatically refreshed in the background during runtime.
 
 ---
 
@@ -223,9 +223,9 @@ Description=Gemini WebAPI Image Generation Server
 After=network.target
 
 [Service]
-User=tim
-WorkingDirectory=/home/tim/Gemini-API
-ExecStart=/home/tim/Gemini-API/.venv/bin/python server.py
+User=your-username
+WorkingDirectory=/path/to/your/project
+ExecStart=/path/to/your/project/.venv/bin/python server.py
 Restart=always
 RestartSec=5
 Environment=PYTHONUNBUFFERED=1
