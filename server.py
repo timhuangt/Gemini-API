@@ -94,10 +94,15 @@ async def lifespan(app: FastAPI):
     else:
         extra = {k: v for k, v in cookies.items() if k not in {"__Secure-1PSID", "__Secure-1PSIDTS"}}
         state.original_cookies = cookies
+        gemini_proxy = os.getenv("GEMINI_PROXY")
+        if gemini_proxy:
+            logger.info(f"Using proxy configuration from env: {gemini_proxy}")
+            
         state.client = GeminiClient(
             secure_1psid=psid,
             secure_1psidts=psidts or "",
             cookies=extra or None,
+            proxy=gemini_proxy or None,
         )
         try:
             logger.info("Initializing connection with Google Gemini...")
@@ -191,9 +196,16 @@ async def api_generate_image(request: GenerateRequest, http_req: Request):
     logger.info(f"Received generation request. Prompt: '{request.prompt}'")
     
     try:
+        # Ensure the prompt starts with a request for an image to guarantee Gemini is driven to image mode
+        user_prompt = request.prompt.strip()
+        lower_prompt = user_prompt.lower()
+        image_prefixes = ("show me a photo of", "show me a picture of", "generate an image of", "generate a photo of", "create an image of")
+        if not any(lower_prompt.startswith(p) for p in image_prefixes):
+            user_prompt = f"show me a photo of {user_prompt}"
+            
         # Internally optimize prompt to enforce a minimal text response and focus 100% on image output
         optimized_prompt = (
-            f"{request.prompt}\n\n"
+            f"{user_prompt}\n\n"
             "[System Instruction: You are an image generator. Focus purely on generating or searching the requested image. "
             "Keep any accompanying text response extremely short, concise, and under 1 sentence.]"
         )
