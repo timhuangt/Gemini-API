@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  gemini-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gemini-api-server
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount cookies.json from the host to persist cookie auto-rotation updates
+      - ./cookies.json:/app/cookies.json
+    environment:
+      # Optional: proxy configuration if your environment requires one
+      - GEMINI_PROXY=${GEMINI_PROXY:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/status"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

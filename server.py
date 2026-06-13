@@ -146,7 +146,7 @@ app.add_middleware(
 # Pydantic Schemas
 # ---------------------------------------------------------------------------
 class GenerateRequest(BaseModel):
-    prompt: str = Field(..., min_length=3, description="Prompt description for image generation.", example="Generate an image of a red cat.")
+    prompt: str = Field(..., min_length=3, description="Prompt description for image generation.", json_schema_extra={"example": "Generate an image of a red cat."})
     no_hd: bool = Field(False, description="Disable HD original quality, download standard resolution instead.")
 
 class ImageResponseItem(BaseModel):

@@ -11,8 +11,9 @@ import sys
 
 def test_api():
     url = "http://localhost:8000/api/generate"
+    prompt = sys.argv[1] if len(sys.argv) > 1 else "Microsoft 365 security features"
     payload = {
-        "prompt": "Microsoft 365 security features",
+        "prompt": prompt,
         "no_hd": True  # Use standard resolution for faster turnaround in testing
     }
     
@@ -58,6 +59,8 @@ def test_api():
                 print(f"  - Alt/Desc: {img.get('alt', 'N/A')}")
                 print(f"  - Base64 Data URI Prefix: {prefix}...")
                 print(f"  - Base64 Data Length: {len(b64_data)} characters")
+                with open("output.txt", "w") as file:
+                    file.write(b64_data)
                 
     except urllib.error.HTTPError as e:
         print(f"HTTP Error {e.code}: {e.read().decode('utf-8')}")
