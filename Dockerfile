@@ -27,11 +27,15 @@ RUN pip install --upgrade pip && \
 # Copy the server script and documentation
 COPY server.py ./
 
-# Create an empty cookies.json if not already mounted, ensuring correct permissions
-RUN echo '{"cookies": {}}' > cookies.json
+# Create a config directory for cookies and other persistent settings
+RUN mkdir -p /app/config && \
+    echo '{"cookies": {}}' > /app/config/cookies.json
 
 # Expose the port FastAPI will run on
 EXPOSE 8000
+
+# Set default env variable for the cookies path
+ENV COOKIES_PATH=/app/config/cookies.json
 
 # Start the FastAPI server using Uvicorn (using python -m for robust binary path resolution)
 CMD ["python", "-m", "uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000"]

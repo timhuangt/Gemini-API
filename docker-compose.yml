@@ -10,7 +10,7 @@ services:
       - "8000:8000"
     volumes:
       # Mount cookies.json from the host to persist cookie auto-rotation updates
-      - ./cookies.json:/app/cookies.json
+      - ./cookies.json:/app/config/cookies.json
     environment:
       # Optional: proxy configuration if your environment requires one
       - GEMINI_PROXY=${GEMINI_PROXY:-}

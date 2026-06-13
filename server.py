@@ -26,7 +26,9 @@ sys.path.insert(0, str(ROOT / "src"))
 from gemini_webapi import GeminiClient, logger
 from gemini_webapi.types.image import GeneratedImage
 
-COOKIES_FILE = ROOT / "cookies.json"
+# Support custom cookies file path via environment variable (useful for Docker volume mounts)
+COOKIES_FILE_PATH = os.getenv("COOKIES_PATH", str(ROOT / "cookies.json"))
+COOKIES_FILE = Path(COOKIES_FILE_PATH).resolve()
 
 # ---------------------------------------------------------------------------
 # Global Gemini Client State Management
