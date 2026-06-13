@@ -33,9 +33,5 @@ RUN echo '{"cookies": {}}' > cookies.json
 # Expose the port FastAPI will run on
 EXPOSE 8000
 
-# Healthcheck to verify the server is running and reachable
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8000/api/status || exit 1
-
-# Start the FastAPI server using Uvicorn
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start the FastAPI server using Uvicorn (using python -m for robust binary path resolution)
+CMD ["python", "-m", "uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000"]
