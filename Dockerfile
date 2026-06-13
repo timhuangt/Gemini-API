@@ -22,7 +22,7 @@ COPY src/ ./src/
 
 # Install the package itself along with FastAPI and Uvicorn
 RUN pip install --upgrade pip && \
-    pip install . fastapi uvicorn
+    SETUPTOOLS_SCM_PRETEND_VERSION=1.0.0 pip install . fastapi uvicorn
 
 # Copy the server script and documentation
 COPY server.py ./
